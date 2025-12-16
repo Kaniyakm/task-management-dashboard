@@ -2,6 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+// src/App.tsx
+import Dashboard from './components/Dashboard/Dashboard';
+
+export default function App() {
+  return <Dashboard />;
+}
 
 function App() {
   const [count, setCount] = useState(0)
