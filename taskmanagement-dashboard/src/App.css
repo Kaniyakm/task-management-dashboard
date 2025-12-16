@@ -1,165 +1,259 @@
-/* app.css */
-/* Dashboard-specific styles, theme variables, and animations */
+/* src/App.css */
+/* Dashboard layout + spacing + components */
 
-/* Light theme defaults */
-:root {
-  --bg: #ffffff;
-  --fg: #1f2937;
-  --card: #f8fafc;
-  --accent: #3b82f6;
-  --muted: #6b7280;
-  --error: #ef4444;
+.dashboard {
+  min-height: 100vh;
+  padding: var(--space-6) var(--space-5);
+  background: var(--bg);
+  color: var(--fg);
+  display: flex;
+  justify-content: center;
 }
 
-/* Dark theme overrides */
-.dashboard--dark {
-  --bg: #0b1020;
-  --fg: #e5e7eb;
-  --card: #111827;
-  --accent: #60a5fa;
-  --muted: #9ca3af;
-  --error: #ef4444;
-}
-
-/* Layout */
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.dashboard__header,
+.dashboard__controls,
+.dashboard__list {
+  width: 100%;
+  max-width: var(--container);
 }
 
 .dashboard__header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  background: transparent;
+  margin-bottom: var(--space-5);
 }
+
 .dashboard__header h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
 }
+
 .header__actions {
   display: flex;
-  gap: 1rem;
-}
-.stats {
-  display: flex;
-  gap: 1rem;
   flex-wrap: wrap;
-  font-size: 0.9rem;
-  color: var(--muted);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  align-items: center;
 }
 
-/* Controls section */
-.dashboard__controls {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-/* Task list */
-.task-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.list-toolbar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-.sort-controls {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Task item card */
-.task-item {
+.header__actions button,
+.import-label {
   background: var(--card);
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
-.task-item:hover {
-  transform: scale(1.02);
+
+.import-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
 }
-.task-item .actions {
+
+.stats {
+  margin-top: var(--space-4);
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.task-item .meta {
-  font-size: 0.8rem;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   color: var(--muted);
-  margin-top: 0.5rem;
-}
-.task-item .title.todo { color: var(--accent); }
-.task-item .title.in-progress { color: orange; }
-.task-item .title.done { color: green; }
-
-/* Error messages */
-.error {
-  color: var(--error);
-  font-size: 0.8rem;
 }
 
-/* Animations for enter/exit (hook up with react-transition-group) */
-.task-item-enter {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-.task-item-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.task-item-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-.task-item-exit-active {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+.stats span {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: var(--shadow);
 }
 
-/* Form styles */
+/* Controls + list layout (responsive) */
+.dashboard__controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+@media (min-width: 900px) {
+  .dashboard__controls {
+    grid-template-columns: 420px 1fr; /* filter/form | list tools (if any) */
+    align-items: start;
+  }
+}
+
+/* Card styling base */
+.task-form,
+.task-filter,
+.dashboard__list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* TaskForm */
 .task-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: var(--space-5);
 }
+
+.task-form .row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 720px) {
+  .task-form .row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 .task-form label {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 0.95rem;
+}
+
+.task-form input,
+.task-form select,
+.task-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+}
+
+.task-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.task-form .actions {
+  margin-top: var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+}
+
+.task-form .actions button[type="submit"] {
+  background: var(--accent);
+  color: white;
+  border: 1px solid transparent;
+}
+
+.task-form .actions button[type="button"] {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+/* TaskFilter (add className="task-filter" on your TaskFilter root) */
+.task-filter {
+  padding: var(--space-5);
+}
+
+/* List container */
+.dashboard__list {
+  padding: var(--space-5);
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Task item */
+.taskItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: transparent;
+}
+
+.taskTitle {
+  font-weight: 650;
+  margin-bottom: var(--space-1);
+}
+
+.taskMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--muted);
   font-size: 0.9rem;
 }
-.task-form input,
-.task-form textarea,
-.task-form select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--muted);
-  border-radius: 4px;
-  font-family: inherit;
-}
-.task-form .actions {
-  display: flex;
-  gap: 1rem;
-}
 
-/* Filter styles */
-.task-filter {
-  display: flex;
-  gap: 1rem;
+/* Drag handle (optional for dnd-kit) */
+.dragHandle {
+  cursor: grab;
+  user-select: none;
+  padding: 8px 10px;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.03);
+  margin-bottom: 8px;
 }
-.task-filter input,
-.task-filter select {
-  padding: 0.4rem;
-  border: 1px solid var(--muted);
-  border-radius: 4px;
+.dashboard--dark .dragHandle {
+  background: rgba(255, 255, 255, 0.06);
+}
+.dragHandle:active {
+  cursor: grabbing;
 }
 
+.filtersGrid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 720px){
+  .filtersGrid{
+    grid-template-columns: 1.2fr 1fr 1fr; /* search wider */
+    align-items: center;
+  }
+}
+
+.task-filter input,
+.task-filter select{
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+}
+.dragHandle {
+  cursor: grab;
+  user-select: none;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.03);
+  margin-bottom: 8px;
+}
+
+.dashboard--dark .dragHandle {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
