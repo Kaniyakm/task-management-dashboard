@@ -1,52 +1,30 @@
-// src/components/TaskList/TaskList.tsx
-import { TaskListProps } from '../../types';
-import TaskItem from './TaskItem';
+import { TaskItemProps } from '../../types';
+import { formatDate } from '../../utils/taskUtils';
 
-export default function TaskList({
-  tasks,
-  onToggleStatus,
-  onDelete,
-  onEdit,
-  onReorder,
-  sort,
-  onSortChange,
-  search,
-  onSearchChange,
-  theme,
-}: TaskListProps) {
-  const changeSortKey = (key: typeof sort.key) => onSortChange({ key, order: sort.order });
-  const toggleOrder = () => onSortChange({ ...sort, order: sort.order === 'asc' ? 'desc' : 'asc' });
+export default function TaskItem({ task, onToggleStatus, onDelete, onEdit, theme }: TaskItemProps) {
+  const bumpPriority = () => {
+    const next = task.priority === 'low' ? 'medium' : task.priority === 'medium' ? 'high' : 'low';
+    onEdit(task.id, { priority: next });
+  };
 
   return (
-    <div className={`task-list task-list--${theme}`}>
-      <div className="list-toolbar">
-        <input placeholder="Search in list..." value={search} onChange={e => onSearchChange(e.target.value)} />
-        <div className="sort-controls">
-          <select value={sort.key} onChange={e => changeSortKey(e.target.value as typeof sort.key)}>
-            <option value="createdAt">Created</option>
-            <option value="dueDate">Due</option>
-            <option value="priority">Priority</option>
-            <option value="title">Title</option>
-            <option value="status">Status</option>
-          </select>
-          <button onClick={toggleOrder}>{sort.order === 'asc' ? 'Asc' : 'Desc'}</button>
+    <li className={`task-item task-item--${theme}`}>
+      <div className="task-item__head">
+        <h3 className={`title ${task.status}`}>{task.title}</h3>
+        <div className="actions">
+          <button onClick={() => onToggleStatus(task.id)}>Toggle Status</button>
+          <button onClick={bumpPriority}>Bump Priority</button>
+          <button onClick={() => onDelete(task.id)}>Delete</button>
         </div>
       </div>
-
-      <ul className="tasks">
-        {tasks.map((t, index) => (
-          <TaskItem
-            key={t.id}
-            task={t}
-            onToggleStatus={onToggleStatus}
-            onDelete={onDelete}
-            onEdit={onEdit}
-            theme={theme}
-            draggableId={t.id}
-            index={index}
-          />
-        ))}
-      </ul>
-    </div>
+      {task.description && <p className="desc">{task.description}</p>}
+      <div className="meta">
+        <span>Status: {task.status}</span>
+        <span>Priority: {task.priority}</span>
+        <span>Created: {formatDate(task.createdAt)}</span>
+        {task.dueDate && <span>Due: {formatDate(task.dueDate)}</span>}
+      </div>
+    </li>
   );
 }
+
