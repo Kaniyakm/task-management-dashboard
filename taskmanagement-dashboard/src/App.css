@@ -1,42 +1,165 @@
+/* app.css */
+/* Dashboard-specific styles, theme variables, and animations */
+
+/* Light theme defaults */
+:root {
+  --bg: #ffffff;
+  --fg: #1f2937;
+  --card: #f8fafc;
+  --accent: #3b82f6;
+  --muted: #6b7280;
+  --error: #ef4444;
+}
+
+/* Dark theme overrides */
+.dashboard--dark {
+  --bg: #0b1020;
+  --fg: #e5e7eb;
+  --card: #111827;
+  --accent: #60a5fa;
+  --muted: #9ca3af;
+  --error: #ef4444;
+}
+
+/* Layout */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.dashboard__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.dashboard__header h1 {
+  font-size: 2rem;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.header__actions {
+  display: flex;
+  gap: 1rem;
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: var(--muted);
 }
 
-.card {
-  padding: 2em;
+/* Controls section */
+.dashboard__controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-.read-the-docs {
-  color: #888;
+/* Task list */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
+.list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.sort-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Task item card */
+.task-item {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.task-item:hover {
+  transform: scale(1.02);
+}
+.task-item .actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.task-item .meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+.task-item .title.todo { color: var(--accent); }
+.task-item .title.in-progress { color: orange; }
+.task-item .title.done { color: green; }
+
+/* Error messages */
+.error {
+  color: var(--error);
+  font-size: 0.8rem;
+}
+
+/* Animations for enter/exit (hook up with react-transition-group) */
+.task-item-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.task-item-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.task-item-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.task-item-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Form styles */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.task-form label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.9rem;
+}
+.task-form input,
+.task-form textarea,
+.task-form select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  font-family: inherit;
+}
+.task-form .actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Filter styles */
+.task-filter {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.task-filter input,
+.task-filter select {
+  padding: 0.4rem;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+}
+
